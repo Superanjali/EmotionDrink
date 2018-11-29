@@ -1,0 +1,54 @@
+http://www.vwlowen.co.uk/arduino/usb-digital/pc-control.htm
+
+
+// Arduino client side
+
+String inputString;
+int val;
+
+void setup() {
+  DDRB = B00111111;               // Pins 8 to 13 are outputs (14 & 15 are for 16MHz crystal)
+  PORTB = 0;                      // All outputs OFF
+  Serial.begin(9600);
+}
+
+void loop() {
+  inputString = "";               // Clear inputString
+  while (Serial.available()) {
+    char digit = Serial.read();   // Read one byte from serial buffer
+	
+	// say what you got:
+    Serial.print("I got: "); // ASCII printable characters
+    Serial.println(incomingByte, DEC);
+	 
+    inputString += digit;         // Add new character to the string inputString
+    delay(2);                     // Let the serial buffer catch its breath.
+  
+    val = inputString.toInt();    // Convert inputString into a proper number
+  }
+   
+  PORTB = val ;                   // Set PortB register bits.      
+}
+
+/********************************************************************/
+
+# Python master side
+
+from msvcrt import getch
+import serial
+
+ser = serial.Serial('COM5', 9600, timeout=0)
+
+while True:
+    key = getch()
+    okey = ord(key)
+    if okey == 27:  # 27 is escape
+        break
+    # Special keys (arrows, f keys, ins, del, etc.) generate two codes:
+    # first = 224, second = call getch() again to read it
+    # only print printable characters
+    if okey >= 32 and okey <=126:
+        print(key, okey)
+        ser.write(key)
+
+		
