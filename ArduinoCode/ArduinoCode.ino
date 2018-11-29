@@ -29,9 +29,12 @@ void command_relay(int key,int pin, int digit){
 void loop() {
   if (Serial.available()) {
     char digit = Serial.read();   // Read one byte from serial buffer
-  command_relay(KEY1,PIN1,digit);
-  command_relay(KEY2,PIN2,digit);
-  command_relay(KEY3,PIN3,digit);
+    Serial.print("I got: "); // ASCII printable characters
+    Serial.println(digit, DEC);
+    
+    command_relay(KEY1,PIN1,digit);
+    command_relay(KEY2,PIN2,digit);
+    command_relay(KEY3,PIN3,digit);
   }
   delay(2);                     // Let the serial buffer catch its breath.                      
  }

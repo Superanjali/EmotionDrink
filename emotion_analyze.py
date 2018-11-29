@@ -1,13 +1,13 @@
 import requests
-import matplotlib.pyplot as plt
-from PIL import Image
-from matplotlib import patches
-from io import BytesIO
 import os
 import cv2
 from timeit import default_timer as timer
+import serial
+
 
 # Parameters #########################################################
+
+ser = serial.Serial('COM8', 9600, timeout=0)
 
 cv_blue = (255,0,0)
 last_event = timer() - 20
@@ -93,37 +93,17 @@ def put_text(img, x, y, text, color):
     thickness = 2 #change thickness
     boxsize, baseline = cv2.getTextSize(text, fontFace, fontScale, thickness)
     cv2.putText(img, text, (x,y + boxsize[1]), fontFace, fontScale, color, thickness)
-    
-# %%    
 
 
-if False:
-    response = requests.post(face_api_url, params=params, headers=headers, data=image_data)
-    response.raise_for_status()
-    faces = response.json()
-    
-    # Display the original image and overlay it with the face information.
-    image_read = open(image_path, "rb").read()
-    image = Image.open(BytesIO(image_read))
-    
-    plt.figure(figsize=(8, 8))
-    ax = plt.imshow(image, alpha=1)
-    for face in faces:
-        fr = face["faceRectangle"]
-        fa = face["faceAttributes"]
-        origin = (fr["left"], fr["top"])
-        p = patches.Rectangle(
-            origin, fr["width"], fr["height"], fill=False, linewidth=2, color='b')
-        ax.axes.add_patch(p)
-        top_emo = get_top_emotion(face)
-        #print(top_emo)
-        #plt.text(origin[0], origin[1], "%s, %d"%(fa["gender"].capitalize(), fa["age"]),fontsize=20, weight="bold", va="bottom")
-        plt.text(origin[0], origin[1], "%.3f, %s"%(top_emo[0],top_emo[1]),fontsize=20, weight="bold", va="bottom")
+def control_arduino(emo):
+    controls = {'happiness':b'1', 'sadness':b'2', 'surprise':b'3'}    
+    for elem in emo:
+        key = elem[1][1]
+        if key in controls:
+            print('serial %s' % controls[key])
+            ser.write(controls[key])
+            break
         
-    _ = plt.axis("off")
-    plt.show()
-
-
 #%%
 
 # Main code ##########################################################
@@ -145,6 +125,7 @@ while True:
     if k%256 == 27:
         # ESC pressed
         print("Escape hit, closing...")
+        ser.close()
         break
     
     if k ==  32:
@@ -152,6 +133,7 @@ while True:
         last_event = timer()
         img_str = cv2.imencode('.jpg', frame)[1].tostring()
         emo = get_emotion(img_str)
+        control_arduino(emo)
         #print(emo)
     
     #print results for limited amount of time:
@@ -161,6 +143,7 @@ while True:
             text = elem[1][1]
             x,y = elem[0]['left'],elem[0]['top']
             w,h = elem[0]['width'],elem[0]['height']
+            
             put_text(frame,x,y-30,text,cv_blue)
             cv2.rectangle(frame,(x,y),(x+w,y+h),cv_blue, 1)
     
