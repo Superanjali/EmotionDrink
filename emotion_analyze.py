@@ -51,13 +51,26 @@ params = {
     'returnFaceAttributes': 'age,gender,emotion'
 }
 
+emotion_multi = {
+        'anger': 4., 
+        'contempt': 0, 
+        'disgust': 0, 
+        'fear': 0, 
+        'happiness': 1., 
+        'neutral': 0, 
+        'sadness': 2., 
+        'surprise': 1.        
+        }
 # %%
 
 # Methods ############################################################
 
 def get_top_emotion(face):
     emotions = face["faceAttributes"]['emotion']
-    inverse = [(emotions[key], key) for key in emotions]
+    inverse = [(emotions[key]*emotion_multi[key], key) for key in emotions]
+    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+    print(emotions)
+    print(inverse)
     return max(inverse)
 
 def get_emotion(image_data):  
@@ -103,7 +116,7 @@ if False:
             origin, fr["width"], fr["height"], fill=False, linewidth=2, color='b')
         ax.axes.add_patch(p)
         top_emo = get_top_emotion(face)
-        print(top_emo)
+        #print(top_emo)
         #plt.text(origin[0], origin[1], "%s, %d"%(fa["gender"].capitalize(), fa["age"]),fontsize=20, weight="bold", va="bottom")
         plt.text(origin[0], origin[1], "%.3f, %s"%(top_emo[0],top_emo[1]),fontsize=20, weight="bold", va="bottom")
         
@@ -139,7 +152,7 @@ while True:
         last_event = timer()
         img_str = cv2.imencode('.jpg', frame)[1].tostring()
         emo = get_emotion(img_str)
-        print(emo)
+        #print(emo)
     
     #print results for limited amount of time:
     time_passed = timer() - last_event
@@ -157,8 +170,3 @@ cam.release()
 cv2.destroyAllWindows()
 
 # %%
-
-for elem in emo:
-    print(elem)
-    print(elem[0])
-    print(elem[0]['top'])
