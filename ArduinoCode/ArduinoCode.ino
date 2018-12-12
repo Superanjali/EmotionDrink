@@ -13,15 +13,12 @@ void setup() {
   pinMode(PIN1, OUTPUT);
   pinMode(PIN2, OUTPUT);
   pinMode(PIN3, OUTPUT);
-  digitalWrite(PIN1, HIGH);
-  digitalWrite(PIN2, HIGH);
-  digitalWrite(PIN3, HIGH);
 }
 void command_relay(int key,int pin, int digit){
   if (digit == key) {  
-    digitalWrite(pin, LOW);   
+    digitalWrite(pin, HIGH);   
     delay(4000);                       
-    digitalWrite(pin, HIGH); 
+    digitalWrite(pin,LOW); 
   }
 }
 

@@ -1,7 +1,7 @@
 from msvcrt import getch
 import serial
 
-ser = serial.Serial('COM8', 9600, timeout=0)
+ser = serial.Serial('COM9', 9600, timeout=0)
 
 while True:
     key = getch()
