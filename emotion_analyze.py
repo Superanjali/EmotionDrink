@@ -7,7 +7,7 @@ import serial
 
 # Parameters #########################################################
 
-ser = serial.Serial('COM9', 9600, timeout=0)
+ser = serial.Serial('COM7', 9600, timeout=0)
 
 cv_blue = (255,0,0)
 last_event = timer() - 20
@@ -17,7 +17,7 @@ param_windowname = 'EmotionDrink'
 #%matplotlib inline
 
 # Replace <Subscription Key> with your valid subscription key.
-subscription_key = "4dbd5770efe843119b3e3281bd2efdeb" #DSFace API
+subscription_key = "25ac6f8fdfbf4496aa605e3ce89f84e1" #DSFace API
 
 # Set image path from local file.
 image_path = os.path.join('Aishwariya_Rai_(face).jpg')
