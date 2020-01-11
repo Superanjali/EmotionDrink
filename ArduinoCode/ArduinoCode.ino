@@ -16,7 +16,7 @@ void setup() {
   pinMode(PIN3, OUTPUT);
 }
 void command_relay(int key,int pin, int digit){
-  int delays[3] = {3500, 6000, 6000};
+  int delays[3] = {3500, 8000, 6000};
   if (digit == key) {
     int d = delays[key-49];  
     digitalWrite(pin, HIGH);
