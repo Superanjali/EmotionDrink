@@ -8,6 +8,7 @@
 #define KEY2 50
 #define KEY3 51
 
+
 void setup() { 
   Serial.begin(9600);
   pinMode(PIN1, OUTPUT);
@@ -15,9 +16,12 @@ void setup() {
   pinMode(PIN3, OUTPUT);
 }
 void command_relay(int key,int pin, int digit){
-  if (digit == key) {  
-    digitalWrite(pin, HIGH);   
-    delay(4000);                       
+  int delays[3] = {3500, 6000, 6000};
+  if (digit == key) {
+    int d = delays[key-49];  
+    digitalWrite(pin, HIGH);
+    // The Keys are 49 ...   
+    delay(d);                       
     digitalWrite(pin,LOW); 
   }
 }
