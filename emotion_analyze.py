@@ -7,7 +7,7 @@ import serial
 
 # Parameters #########################################################
 
-ser = serial.Serial('COM5', 9600, timeout=0)
+ser = serial.Serial('COM6', 9600, timeout=0)
 
 cv_blue = (255,0,0)
 last_event = timer() - 20
@@ -18,6 +18,7 @@ param_windowname = 'EmotionDrink'
 
 # Replace <Subscription Key> with your valid subscription key.
 subscription_key = "25ac6f8fdfbf4496aa605e3ce89f84e1" #DSFace API
+subscription_key = '85b618f08fe54ab7a0b6b2f570e18f52'
 
 # Set image path from local file.
 image_path = os.path.join('Aishwariya_Rai_(face).jpg')
@@ -96,7 +97,7 @@ def put_text(img, x, y, text, color):
 
 
 def control_arduino(emo):
-    controls = {'happiness':b'1', 'sadness':b'2', 'surprise':b'3'}    
+    controls = {'happiness':b'3', 'sadness':b'1', 'surprise':b'2'}    
     for elem in emo:
         key = elem[1][1]
         if key in controls:
@@ -153,3 +154,11 @@ cam.release()
 cv2.destroyAllWindows()
 
 # %%
+# Only 1,3 are working. Assign them to the easiest emotion
+# DEBUG CODE 
+if False:
+    ser = serial.Serial('COM6', 9600, timeout=0)
+if False:
+    ser.write(b'1')
+    ser.write(b'2')
+    ser.write(b'3')

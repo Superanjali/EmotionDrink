@@ -7,7 +7,7 @@ import serial
 
 # Parameters #########################################################
 
-ser = serial.Serial('COM5', 9600, timeout=0)
+ser = serial.Serial('COM7', 9600, timeout=0)
 
 cv_blue = (255,0,0)
 last_event = timer() - 20
